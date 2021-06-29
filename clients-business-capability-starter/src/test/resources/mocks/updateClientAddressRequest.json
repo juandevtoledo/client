@@ -1,0 +1,12 @@
+{
+  "idClient": "d0d1a67b-5a03-4c22-8e50-5084ee47a7c4",
+  "checkpoint": "CLIENT_VERIFICATION",
+  "address": "address",
+  "code": "ADL",
+  "addressPrefix": "PREFIX",
+  "addressComplement": "cmpl",
+  "city": "BOGOTA",
+  "cityId": "01",
+  "department": "BOGOTA",
+  "departmentId": "02"
+}

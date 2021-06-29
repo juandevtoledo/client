@@ -1,0 +1,10 @@
+{
+  "whitelisted": true,
+  "clientPersonalInformation": {
+    "idDocument": {
+      "documentType": "CC",
+      "idCard": "123"
+    }
+  },
+  "whitelistExpirationDate": "2020-11-25T00:00:00"
+}

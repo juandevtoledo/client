@@ -1,0 +1,209 @@
+buildscript {
+
+  ext {
+      springBootVersion = '2.2.10.RELEASE'
+      springWeb = '5.2.9.RELEASE'
+      jacocoVersion = '0.8.4'
+      jfrogUser = System.getenv('JFROG_USER')
+      jfrogPassword = System.getenv('JFROG_PASSWORD')
+      jfrogContextUrl = System.getenv('JFROG_CONTEXT_URL')
+  }
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+      url "https://piso19.jfrog.io/piso19/libs-release"
+      credentials {
+        username = "$jfrogUser"
+        password = "$jfrogPassword"
+      }
+    }
+    maven {
+      url "https://piso19.jfrog.io/piso19/libs-snapshot"
+      credentials {
+        username = "$jfrogUser"
+        password = "$jfrogPassword"
+      }
+    }
+  }
+  configurations.maybeCreate("pitest")
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath 'net.researchgate:gradle-release:2.6.0'
+    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
+  }
+
+}
+
+apply plugin: "org.sonarqube"
+apply from: "$rootDir/gradle/all.gradle"
+apply from: "$rootDir/gradle/release.gradle"
+
+release {
+  tagTemplate = '$name-$version'
+  failOnCommitNeeded = false
+  failOnPublishNeeded = true
+  failOnSnapshotDependencies = false
+  failOnUnversionedFiles = true
+  failOnUpdateNeeded = true
+  revertOnFail = true
+  preCommitText = '[ci skip] [CircleCI] '
+  preTagCommitMessage = 'release '
+  tagCommitMessage = 'release '
+  newVersionCommitMessage = 'release '
+  buildTasks = ['build', 'releaseBuild', 'publishCurrent']
+
+}
+
+task releaseBuild {
+  dependsOn(
+          'clients-business-capability-starter:build',
+          'clients-business-capability-sdk:build',
+          'clients-business-capability-services:build'
+  )
+}
+
+task publishCurrent {
+  dependsOn('artifactoryPublish')
+}
+
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+  dependsOn = subprojects.test
+  additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+  sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+  classDirectories = files(subprojects.sourceSets.main.output)
+  executionData = files(subprojects.jacocoTestReport.executionData)
+  reports {
+    html.enabled = true
+    xml.enabled = true
+    csv.enabled = false
+  }
+  onlyIf = {
+    true
+  }
+  doFirst {
+    executionData = files(executionData.findAll {
+      it.exists()
+    })
+  }
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: '**/newrelic/**')
+    }))
+  }
+}
+
+def allTestCoverageFile = "${rootProject.buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+
+
+subprojects {
+  apply plugin: 'java'
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+      url "https://piso19.jfrog.io/piso19/libs-release"
+      credentials {
+        username = "$jfrogUser"
+        password = "$jfrogPassword"
+      }
+    }
+    maven {
+      url "https://piso19.jfrog.io/piso19/libs-snapshot"
+      credentials {
+        username = "$jfrogUser"
+        password = "$jfrogPassword"
+      }
+    }
+    sonarqube {
+      properties {
+        property "sonar.jacoco.reportPaths", allTestCoverageFile
+      }
+    }
+  }
+  dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "$springBootVersion"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "$springBootVersion"
+    compile group: 'com.fasterxml.uuid', name: 'java-uuid-generator', version: '3.1.5'
+    testCompile group: 'org.jacoco', name: 'org.jacoco.core', version: "$jacocoVersion"
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "$springBootVersion"
+    testCompile "com.github.tomakehurst:wiremock-jre8:2.27.2"
+    testCompile "org.mockito:mockito-core:2.13.0"
+    implementation "org.jboss.resteasy:resteasy-jaxrs:3.13.2.Final"
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
+    implementation "org.yaml:snakeyaml:1.27"
+    implementation('io.netty:netty-codec-http2:4.1.60.Final'){
+      transitive = false
+    }
+  }
+  sonarqube {
+    properties {
+      property 'sonar.exclusions',
+              "**/com/lulobank/clients/services/domain/**, " +
+                      "**/com/lulobank/clients/starter/adapter/config/**, " +
+                      "**/com/lulobank/clients/starter/config/**, " +
+                      "**/com/lulobank/clients/starter/env/**, " +
+                      "**/com/lulobank/clients/starter/exception/**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/config/**, " +
+                      "**/com/lulobank/clients/services/outboundadapters/model**, " +
+                      "**/com/lulobank/clients/services/outboundadapters/dynamoconverter/**, " +
+                      "**/com/lulobank/clients/services/utils/**, " +
+                      "**/com/lulobank/clients/services/events/**," +
+                      "**/com/lulobank/clients/services/exception/**," +
+                      "**/com/lulobank/clients/services/features/riskengine/model/**,"+
+                      "**/com/lulobank/clients/services/inboundadapters/model/ClientSuccessResult.java**, " +
+                      "**/com/lulobank/clients/services/features/login/model/SignUpResult.java**, " +
+                      "**/com/lulobank/clients/services/features/login/model/TokensSignUp.java**, " +
+                      "**/com/lulobank/clients/services/features/reporting/model/**, " +
+                      "**/com/lulobank/clients/services/features/profile/model/**, " +
+                      "**/com/lulobank/clients/services/features/changepassword/model/Password.java**, " +
+                      "**/com/lulobank/clients/services/inboundadapters/model/ClientErrorResult.java**, " +
+                      "**/com/lulobank/clients/services/features/recoverpassword/model/RecoverPasswordEmailClient.java**, " +
+                      "**/com/lulobank/clients/services/features/onboardingvalidations/ValidateExistenceRequest.java**, " +
+                      "**/com/lulobank/clients/services/features/clientproducts/validators/model/**, " +
+                      "**/com/lulobank/clients/services/features/onboardingclients/model/**," +
+                      "**/com/lulobank/clients/services/actions/CreateCognitoClientAction.java**," +
+                      "**/com/lulobank/clients/sdk/operations/dto/**," +
+                      "**/com/lulobank/clients/services/ports/out/error/**,"+
+                      "**/com/lulobank/clients/services/features/login/model/AttemptTimeResult.java**," +
+                      "**/com/lulobank/clients/services/features/recoverpassword/model/**, " +
+                      "**/com/lulobank/clients/services/inboundadapters/model/LoanConditions.java**, " +
+                      "**/com/lulobank/clients/services/adapters/port/out/dynamo/dto/**, " +
+                      "**/com/lulobank/clients/services/application/port/out/clientsdata/model/**, " +
+                      "**/com/lulobank/clients/services/application/port/out/debitcards/model/**, " +
+                      "**/com/lulobank/clients/services/application/port/out/savingsaccounts/model/**, " +
+                      "**/com/lulobank/clients/services/application/util/HttpDomainStatus.java**, "+
+                      "**/com/lulobank/clients/v3/usecase/command/ClientDemographicInfo.java**, "+
+                      "**/com/lulobank/clients/v3/usecase/fatca/event/**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/out/sqs/dto/**, " +
+                      "**/com/lulobank/clients/v3/adapters/port/out/dynamo/dto/**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/out/savingsaccountservice/dto/SavingAccountType.java**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/in/dto/ApprovedOffersResponse.java**, " +
+                      "**/com/lulobank/clients/v3/adapters/port/out/credits/dto/GetActiveLoandResponse.java**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/out/credits/dto/LoanDetailResponse.java**, " +
+                      "**/com/lulobank/clients/starter/v3/adapters/out/credits/config/CreditsServiceAdapterConfig.java**" 
+                      
+      property "sonar.coverage.jacoco.xmlReportPaths", allTestCoverageFile
+    }
+  }
+
+  configurations.all {
+    exclude group: "org.bouncycastle", module: "bcprov-jdk15on"
+    resolutionStrategy.force 'net.minidev:json-smart:2.4.2'
+  }
+
+}
+project.tasks["sonarqube"].dependsOn "jacocoRootReport"

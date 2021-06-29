@@ -1,0 +1,15 @@
+{
+  "idClient": "1106bc49-4a0f-4f52-86ca-1994bb3c26d9",
+  "idCard": "12345678",
+  "name": "some-name",
+  "nickname": "some-nickname",
+  "lastName": "some-lastname",
+  "address": "some-address",
+  "emailAddress": "mail@mail.com",
+  "emailVerified": true,
+  "phonePrefix": 57,
+  "phoneNumber": "3168906733",
+  "idKeycloak": "12602b88-a201-4f20-91a0-05bb2f79fb13",
+  "idCbs": "789456132",
+  "blackListState": "NON_BLACKLISTED"
+}

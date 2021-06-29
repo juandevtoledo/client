@@ -1,0 +1,7 @@
+{
+  "errors": [
+    {
+      "failure": "COGNITO_NOT_AUTHORIZED"
+    }
+  ]
+}

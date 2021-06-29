@@ -1,0 +1,12 @@
+{
+  "content": {
+    "currentCard": {
+      "status": "IN_PROGRESS",
+      "pin": 126272
+    },
+    "cardRequest": {
+      "status": "CREATED",
+      "statusDate": "2020-03-30"
+    }
+  }
+}

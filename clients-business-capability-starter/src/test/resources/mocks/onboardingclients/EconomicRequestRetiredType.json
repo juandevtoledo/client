@@ -1,0 +1,18 @@
+{
+  "additionalIncome": 0,
+  "assets": 100000000,
+  "economicActivity": "",
+  "employeeCompany": {
+    "city": "",
+    "name": "",
+    "state": ""
+  },
+  "foreignCurrencyTransactions": [],
+  "idClient": "20814598-0904-45b7-bafc-c5cd7b795afd",
+  "liabilities": 1000000,
+  "monthlyIncome": 5000000,
+  "monthlyOutcome": 1000000,
+  "occupationType": "RETIRED",
+  "typeSaving": "",
+  "savingPurpose": ""
+}

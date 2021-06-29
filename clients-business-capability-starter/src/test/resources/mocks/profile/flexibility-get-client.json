@@ -1,0 +1,31 @@
+{
+  "gender": "M",
+  "id": "1234567",
+  "firstName": "some",
+  "lastName": "guy",
+  "document": {
+    "number": "2345678",
+    "type": "01"
+  },
+  "address": {
+    "address": "address",
+    "city": {
+      "code": "c-code",
+      "description": "c-description"
+    },
+    "state": {
+      "code": "s-code",
+      "description": "s-description"
+    },
+    "country": {
+      "code": "co-code",
+      "description": "co-description"
+    },
+    "zipCode": "zipCode"
+  },
+  "email": "email@mail.com",
+  "phoneNumber": "7654321",
+  "mobileNumber": "573001234567",
+  "seller": false,
+  "hasRecharge": false
+}

@@ -1,0 +1,22 @@
+clients:
+  endpoint:
+    base: /clients
+server:
+  port: 8081
+  servlet:
+    contextPath: /clients
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          verify-exp: false
+          private-key-value: classpath:private_key.pem
+          public-key-value: classpath:public_key.pem
+          tenantAWS:
+            jwk-set-uri: ${mockwebserver.url}/.well-known/jwks.json
+            issuer: http://localhost:52231
+            authorized-scope: internal_api/internal_transactions
+            authorized-scope-zendesk: zendesk/zendesk
+            authorized-scope-batch: batch-servibanca-integration/cards

@@ -1,0 +1,164 @@
+clients:
+  endpoint:
+    base: /clients
+server:
+  port: 8081
+  servlet:
+    contextPath: /clients
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      use-default-aws-credentials-chain: true
+    region:
+      static: us-east-1
+    dynamodb:
+      endpoint: https://dynamodb.us-east-1.amazonaws.com
+    sqs:
+      endpoint: https://sqs.us-east-1.amazonaws.com/848155883266
+      listeners:
+          application-events: https://sqs.us-east-1.amazonaws.com/848155883266/remove-clientsAutomaticDebt
+      blacklist-events: https://sqs.us-east-1.amazonaws.com/848155883266/blackListEvents-sand
+      client-events: https://sqs.us-east-1.amazonaws.com/848155883266/clientsEvents-sand
+      riskengine-events: https://sqs.us-east-1.amazonaws.com/848155883266/analytics-events-sand
+      risk-engine-events: https://sqs.us-east-1.amazonaws.com/848155883266/risk-engine-loan-commercial-offer-in-sand
+      saving-account-events: https://sqs.us-east-1.amazonaws.com/848155883266/savingsaccountsEvents-sand
+      credits-events: https://sqs.us-east-1.amazonaws.com/848155883266/creditsEmailQueue-sand
+      reporting-events: https://sqs.us-east-1.amazonaws.com/848155883266/reportingEvents-sand
+      client-riskresponse-events: https://sqs.us-east-1.amazonaws.com/848155883266/clients-analytics-responses-sand
+      notification-events: https://sqs.us-east-1.amazonaws.com/848155883266/Notifications-sand
+      client-alerts-events: https://sqs.us-east-1.amazonaws.com/848155883266/clientAlerts-sand
+      customer-events: https://sqs.us-east-1.amazonaws.com/848155883266/customerService-sand
+      cards-events: https://sqs.us-east-1.amazonaws.com/848155883266/cards-sand
+      reporting-rx-events: https://sqs.us-east-1.amazonaws.com/848155883266/reportingEventsRx-sand
+      transactions-events: https://sqs.us-east-1.amazonaws.com/848155883266/transactionsEventsV2-sand
+      notification-events-v2:
+        url: https://sqs.us-east-1.amazonaws.com/848155883266/clientAlertsV2-sand
+        max-number-of-messages: 3
+        delay: 360
+    cognito:
+      pool-id: fakeMyPoolId
+      clientapp-id: fakeMyClientAppId
+      custom-domain: fakeMyCustomDomainId
+      region: "us-east-2"
+      endpoint: https://cognito-idp.us-east-1.amazonaws.com
+    redis:
+      host: localhost
+      port: 7000
+  google:
+    firebase:
+      database-url: https://lulobank-piso19.firebaseio.com
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+services:
+  credits:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8084
+  blacklist:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8085
+  savings:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8082
+  otp:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8083
+  client-alerts:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8096
+  authentication:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8100
+  reporting:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8089
+  cards:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8094
+  customer:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8095
+  transactions:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8086
+  parameters:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8088
+  reporting-xcb:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8104
+  digital-evidence-xbc:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8111
+  profile-xbc:
+    url: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:8106
+flexibility:
+  sdk:
+    url: http://flex-internal-nlb-sand-7780f47397c1c3fc.elb.us-east-1.amazonaws.com
+    clientId: ABTr4YVFhas8Yfq1uGfR
+    secret: fRrdj0JD1zDLLcPHpVkCsKRKPG5C4kafaTW5PUSy
+login:
+  attempts:
+    3: 600
+    6: 900
+    7: -1
+spring.autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+    - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+security:
+  keycloak:
+    url: "http://keycloak-internal-nlb-sand-d2690ae8202cb0ed.elb.us-east-1.amazonaws.com/auth/"
+    realm: lulobank
+    clientId: admin-cli
+    user: luloapiuser
+    password: AuH*>#mc41-R7jpsZnRu[UW3P@<OXMaF
+spring:
+  application:
+    name: "clients-business-capability"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          verify-exp: true
+          private-key-value: classpath:private_key.pem
+          public-key-value: classpath:public_key.pem
+          tenantLulo:
+            public-key-value: "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxTo//lX8CnIUv24gUO6ycNcpmDScHsMX2pAqefCmhEx6ulOUWNdEolCPX4pc+m5KLmtVu6YQ62ewZWzROgUw3Lr3rPXa2XVM4nsqeI9qn/ZbBJZCnGFYOhuPoWJVMdF6eJYSLHy+u3TuscNmNydH+SDAdD3ZWl0TlW+orqsP+akXzzSiIYYKkLagtqJbWaJnwf/pklovPqpUfaURT9Gr4/0Fc7XAZQ3xNcz5oM/GbMdW99viw23dkqJ7Huyl2IHy7pfSSp/hR2k3vsSCaFMC61cs3xjLhrwkqj9EKqRk9ILGoDdcrTAk/T88vE1D8hwTMl6yvER9cDnAhego3h+Q2wIDAQAB-----END PUBLIC KEY-----"
+          tenantAWS:
+            jwk-set-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_1WmBHEn0a/.well-known/jwks.json
+            issuer: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_1WmBHEn0a
+            authorized-scope: internal_api/internal_transactions
+            authorized-scope-zendesk: zendesk/zendesk
+            authorized-scope-batch: batch-servibanca-integration/cards
+  zipkin:
+    baseUrl: http://lbk-nlb-sand-b4ae09a807e738b7.elb.us-east-1.amazonaws.com:9411/
+
+risk-engine:
+  delay-options: 2,4,8
+
+identitybiometric:
+  mobile-response:
+    delay-options: 5,30,20,10
+  adotech-response:
+    delay-options: 300,300,300
+
+savingaccount:
+  closure:
+    balance:
+      lulo:
+        max: 1000
+      cardlessWithdrawal:
+        min: 20000
+        max: 400000
+      officeWithdrawal:
+        min: 1000
+        max: 1200000
+logging:
+  mask-fields:
+    complete: '/password,/newpin,/oldpin,/newPassword,/oldPassword'
+    partially:
+banner:
+  product-offer:
+    validators:
+      registry_preapproved: pepValidator, savingValidator
+      confirm_preapproved: pepValidator, savingValidator
+    expiredDays:
+      registry_preapproved: 10
+      confirm_preapproved: 10
+    descriptions:
+      registry_preapproved: registry-preapproved description
+      confirm_preapproved: confirm-preapproved description
+    additionalInfo:
+      confirm_preapproved: confirm-preapproved adicional information

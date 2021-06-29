@@ -1,0 +1,16 @@
+{
+  "selectedProduct": "CREDIT_ACCOUNT",
+  "emailCreateClientRequest": {
+    "address": "tae_eelmy@mailinator.com",
+    "verified": true
+  },
+  "password": "654321",
+  "phoneCreateInitialClient": {
+    "deviceInfo": null,
+    "number": 3996051937,
+    "prefix": 57,
+    "verified": true
+  },
+  "nickname": "vkinu",
+  "documentAcceptancesTimestamp": "1592239025"
+}

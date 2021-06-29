@@ -1,0 +1,25 @@
+{
+  "customer": {
+    "documentNumber": "112233445566",
+    "name": "name",
+    "lastName": "lastName",
+    "mobilePhone": "3101234567",
+    "email": "mail@mail.com",
+    "documentType": "CC",
+    "address": "address"
+  },
+  "products": [
+    {
+      "productType": "ACCOUNT",
+      "productNumber": "7890",
+      "status": "ACTIVE",
+      "created": "2020-06-11T14:25:45"
+    },
+    {
+      "productType": "CARD",
+      "productNumber": "5566",
+      "status": "ACTIVE",
+      "created": "2020-08-10"
+    }
+  ]
+}

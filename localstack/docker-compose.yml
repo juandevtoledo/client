@@ -1,0 +1,22 @@
+version: '3'
+services:
+  localstack:
+    container_name: localstack-infra
+    image: 910332525012.dkr.ecr.us-east-1.amazonaws.com/localstack-infra:latest
+    ports:
+      - 4569:4569
+      - 4572:4572
+      - 4576:4576
+    volumes:
+      - localstackdata:/tmp/localstack
+      - ./scripts:/scripts
+    environment:
+      DATA_DIR: /tmp/localstack/data
+      SERVICES: s3,sqs,dynamodb
+  firebase:
+    container_name: firebase
+    image: andofood/local-firebase
+    ports:
+      - 5000:5000
+volumes:
+  localstackdata:

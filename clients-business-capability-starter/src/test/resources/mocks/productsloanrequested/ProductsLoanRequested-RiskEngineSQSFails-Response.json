@@ -1,0 +1,8 @@
+{
+  "errors": [
+    {
+      "failure": "ERROR_LOAN_SENDING_TO_RISK_ENGINE_SQS",
+      "value": "502"
+    }
+  ]
+}

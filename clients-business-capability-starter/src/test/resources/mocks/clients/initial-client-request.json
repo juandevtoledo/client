@@ -1,0 +1,16 @@
+{
+  "selectedProduct": "CREDIT_ACCOUNT",
+  "emailCreateClientRequest": {
+    "address": "sample_email@mailinator.com",
+    "verified": true
+  },
+  "password": "123456",
+  "phoneCreateInitialClient": {
+    "deviceInfo": null,
+    "number": 3001234567,
+    "prefix": 57,
+    "verified": true
+  },
+  "nickname": "somenewuser",
+  "documentAcceptancesTimestamp": "1592239026"
+}

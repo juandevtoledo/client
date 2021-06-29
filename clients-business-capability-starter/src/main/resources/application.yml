@@ -1,0 +1,164 @@
+clients:
+  endpoint:
+    base: /clients
+server:
+  port: 8081
+  servlet:
+    contextPath: /clients
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      use-default-aws-credentials-chain: true
+    region:
+      static: us-east-1
+    dynamodb:
+      endpoint: http://localhost:8000
+    sqs:
+      endpoint: http://sqs.dev.local:9324
+      listeners:
+        application-events: http://sqs.dev.local:9324/queue/default
+      blacklist-events: http://sqs.dev.local:9324/queue/default
+      client-events: http://sqs.dev.local:9324/queue/default
+      riskengine-events: http://sqs.dev.local:9324/queue/default
+      risk-engine-events: http://sqs.dev.local:9324/queue/default
+      saving-account-events: http://sqs.dev.local:9324/queue/default
+      credits-events: http://sqs.dev.local:9324/queue/default
+      reporting-events: http://sqs.dev.local:9324/queue/default
+      client-riskresponse-events: http://sqs.dev.local:9324/queue/default
+      notification-events: http://sqs.dev.local:9324/queue/default
+      client-alerts-events: http://sqs.dev.local:9324/queue/default
+      customer-events: http://sqs.dev.local:9324/queue/default
+      cards-events: http://localhost:9324/queue/cards
+      reporting-rx-events: http://localhost:9324/queue/default
+      transactions-events: http://localhost:9324/queue/default
+      notification-events-v2:
+        url: http://localhost:9324/queue/default
+        max-number-of-messages: 3
+        delay: 360
+    cognito:
+      pool-id: fakeMyPoolId
+      clientapp-id: fakeMyClientAppId
+      custom-domain: fakeMyCustomDomainId
+      region: "us-east-2"
+      endpoint: https://cognito-idp.us-east-1.amazonaws.com
+    redis:
+      host: redis.dev.local
+      port: 7000
+  google:
+    firebase:
+      database-url: https://localhost:5000
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+services:
+  credits:
+    url: "http://domain.local:8084/"
+  blacklist:
+    url: "http://domain.local:8085/"
+  savings:
+    url: "http://domain.local:8082/"
+  otp:
+    url: "http://domain.local:8083/"
+  client-alerts:
+    url: "http://domain.local:8096/"
+  authentication:
+    url: "http://domain.local:8100/"
+  reporting:
+    url: "http://domain.local:8089/"
+  cards:
+    url: "http://domain.local:8094/"
+  customer:
+    url: "http://domain.local:8095/"
+  transactions:
+    url: "http://domain.local:8086/"
+  parameters:
+    url: "http://localhost:8088/"
+  reporting-xcb:
+    url: "http://domain.local:8104/"
+  digital-evidence-xbc:
+    url: "http://domain.local:8111/"
+  profile-xbc:
+    url: "http://domain.local:8106/"
+flexibility:
+  sdk:
+    url: "http://happy.flexibilty.com"
+    clientId: fakeClientId
+    secret: fakeSecretId
+login:
+  attempts:
+    3: 600
+    6: 900
+    7: -1
+spring.autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+    - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+security:
+  keycloak:
+    url: "http://localhost:8080/auth"
+    realm: "master"
+    clientId: "admin-cli"
+    user: "admin"
+    password: "admin"
+spring:
+  application:
+    name: "clients-business-capability"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          verify-exp: true
+          private-key-value: classpath:private_key.pem
+          public-key-value: classpath:public_key.pem
+          tenantLulo:
+            public-key-value: "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxTo//lX8CnIUv24gUO6ycNcpmDScHsMX2pAqefCmhEx6ulOUWNdEolCPX4pc+m5KLmtVu6YQ62ewZWzROgUw3Lr3rPXa2XVM4nsqeI9qn/ZbBJZCnGFYOhuPoWJVMdF6eJYSLHy+u3TuscNmNydH+SDAdD3ZWl0TlW+orqsP+akXzzSiIYYKkLagtqJbWaJnwf/pklovPqpUfaURT9Gr4/0Fc7XAZQ3xNcz5oM/GbMdW99viw23dkqJ7Huyl2IHy7pfSSp/hR2k3vsSCaFMC61cs3xjLhrwkqj9EKqRk9ILGoDdcrTAk/T88vE1D8hwTMl6yvER9cDnAhego3h+Q2wIDAQAB-----END PUBLIC KEY-----"
+            issuer: https://lulobank.com.co
+          tenantAWS:
+            jwk-set-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_ObwwWL9Bd/.well-known/jwks.json
+            issuer: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_ObwwWL9Bd
+            authorized-scope: internal_api/internal_transactions
+            authorized-scope-zendesk: zendesk/zendesk
+            authorized-scope-batch: batch-servibanca-integration/cards
+
+risk-engine:
+  delay-options: 2,4,8
+
+identitybiometric:
+  mobile-response:
+    delay-options: 5,30,20,10
+  adotech-response:
+    delay-options: 300,300,300
+
+savingaccount:
+  closure:
+    balance:
+      lulo:
+        max: 1000
+      cardlessWithdrawal:
+        min: 20000
+        max: 400000
+      officeWithdrawal:
+        min: 1000
+        max: 1200000
+logging:
+  mask-fields:
+    complete: '/occupationType,/economicActivity,/monthlyIncome,/monthlyOutcome,/employeeCompany/city,/employeeCompany/name,/employeeCompany/state,/additionalIncome,/assets,/liabilities,/savingPurpose,/typeSaving'
+    partially:
+
+banner:
+  product-offer:
+    validators:
+      registry_preapproved: pepValidator, savingValidator
+      confirm_preapproved: pepValidator, savingValidator
+    expiredDays:
+      registry_preapproved: 10
+      confirm_preapproved: 10
+    descriptions:
+      registry_preapproved: registry-preapproved description
+      confirm_preapproved: confirm-preapproved description
+    additionalInfo:
+      confirm_preapproved: confirm-preapproved adicional information

@@ -1,0 +1,150 @@
+clients:
+  endpoint:
+    base: /clients
+server:
+  port: 8081
+  servlet:
+    contextPath: /clients
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      use-default-aws-credentials-chain: true
+    region:
+      static: ${AWS_SQS_REGION}
+    dynamodb:
+      endpoint: ${AWS_DYNAMO_ENDPOINT}
+    sqs:
+      listeners:
+        application-events: ${AWS_SQS_CLIENTS_ENDPOINT_V2}
+      blacklist-events: ${AWS_SQS_BLACKLIST_ENDPOINT}
+      client-events: ${AWS_SQS_CLIENTS_ENDPOINT}
+      riskengine-events: ${AWS_SQS_ANALYTICS_ENDPOINT}
+      risk-engine-events: ${AWS_SQS_RISK_ENGINE_ENDPOINT}
+      saving-account-events: ${AWS_SQS_SAVING_ACCOUNT_ENDPOINT}
+      credits-events: ${AWS_SQS_CREDITS_ENDPOINT}
+      reporting-events: ${AWS_SQS_REPORTING_ENDPOINT}
+      client-riskresponse-events: ${AWS_SQS_CLIENTS_RISK_RESPONSE_ENDPOINT}
+      notification-events: ${AWS_SQS_NOTIFICATION_ENDPOINT}
+      client-alerts-events: ${AWS_SQS_CLIENT_ALERTS_ENDPOINT}
+      customer-events: ${AWS_SQS_CUSTOMER_EVENTS_ENDPOINT}
+      cards-events: ${AWS_SQS_CARDS_ENDPOINT}
+      reporting-rx-events: ${AWS_SQS_REPORTING_XBC_ENDPOINT}
+      transactions-events: ${AWS_SQS_TRANSACTIONS_EVENTS_V2_SERVICE}
+      notification-events-v2:
+        url: ${AWS_SQS_NOTIFICATION_ENDPOINT_V2}
+        max-number-of-messages: 3
+        delay: 360
+    cognito:
+      pool-id: ${AWS_COGNITO_POOL_ID}
+      clientapp-id: ${AWS_COGNITO_CLIENT_APP_ID}
+      custom-domain: ${AWS_COGNITO_CUSTOM_DOMAIN}
+      region: ${AWS_COGNITO_REGION}
+      endpoint: ${AWS_COGNITO_ENDPOINT}
+    redis:
+        host: ${REDIS_CLUSTER_URL}
+        port: ${REDIS_CLUSTER_PORT}
+  google:
+    firebase:
+      database-url: ${GOOGLE_FIREBASE_ENDPOINT}
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+services:
+  credits:
+    url: ${CREDITS_SERVICE_URL}
+  blacklist:
+    url: ${BLACKLIST_SERVICE_URL}
+  savings:
+    url: ${SAVINGS_SERVICE_URL}
+  otp:
+    url: ${OTP_SERVICE_URL}
+  client-alerts:
+    url: ${CLIENT_ALERTS_SERVICE_URL}
+  authentication:
+    url: ${AUTHENTICATION_SERVICE_URL}
+  reporting:
+    url: ${REPORTING_SERVICE_URL}
+  cards:
+    url: ${CARDS_SERVICE_URL}
+  customer:
+    url: ${CUSTOMER_SERVICE_URL}
+  transactions:
+    url: ${TRANSACTIONS_SERVICE_URL}
+  parameters:
+    url: ${PARAMETERS_SERVICE_URL}
+  reporting-xcb:
+    url: ${REPORTING_XBC_SERVICE_URL}
+  digital-evidence-xbc:
+    url: ${DIGITAL_EVIDENCE_XBC_SERVICE_URL}
+  profile-xbc:
+    url: ${PROFILE_XBC_SERVICE_URL}
+security:
+  keycloak:
+    url: ${SECURITY_KEYCLOAK_URL}
+    realm: ${SECURITY_KEYCLOAK_REALM}
+    clientId: ${SECURITY_KEYCLOAK_CLIENTID}
+    user: ${SECURITY_KEYCLOAK_USER}
+    password: ${SECURITY_KEYCLOAK_PASSWORD}
+flexibility:
+  sdk:
+    url: ${FLEXIBILITY_ENDPOINT}
+    clientId: ${FLEXIBILITY_CLIENT_ID}
+    secret: ${FLEXIBILITY_SECRET}
+login:
+  attempts:
+    3: 600
+    6: 900
+spring.autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+    - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+logging:
+  mask-fields:
+    complete: ${LOG_MASKED_FIELDS_COMPLETE}
+    partially: ${LOG_MASKED_FIELDS_PARTIALLY}
+    
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} | marker=%marker |  clientId=%X{clientId} | level=%5p | thread=%thread | traceId=%X{traceId} spanId=%X{spanId} |  projectVersion=%X{projectVersion} |class=%class{15}.%L | msg="%.-50000m"%n'
+
+savingaccount:
+  closure:
+    balance:
+      lulo:
+        max: ${ACCOUNT_CLOSURE_LULO_MAX_BALANCE}
+      cardlessWithdrawal:
+        min: ${ACCOUNT_CLOSURE_CARDLESS_WITHDRAWAL_MIN_BALANCE}
+        max: ${ACCOUNT_CLOSURE_CARDLESS_WITHDRAWAL_MAX_BALANCE}
+      officeWithdrawal:
+        min: ${ACCOUNT_CLOSURE_OFFICE_WITHDRAWAL_MIN_BALANCE}
+        max: ${ACCOUNT_CLOSURE_OFFICE_WITHDRAWAL_MAX_BALANCE}
+
+risk-engine:
+  delay-options: ${RISK_ENGINE_DELAY}
+
+identitybiometric:
+  mobile-response:
+    delay-options: ${IDENTITY_MOBILE_RESPONSE_DELAY}
+  adotech-response:
+    delay-options: ${IDENTITY_ADOTECH_RESPONSE_DELAY}
+
+spring:
+  zipkin:
+    baseUrl: ${SPRING_ZIPKIN_BASEURL}
+
+banner:
+  product-offer:
+    validators:
+      registry_preapproved: ${REGISTRY_PREAPPROVED_VALIDATOR_LIST}
+      confirm_preapproved: ${CONFIRM_PREAPPROVED_VALIDATOR_LIST}
+    expiredDays:
+      registry_preapproved: ${REGISTRY_PREAPPROVED_CREDIT_DAYS}
+      confirm_preapproved: ${CONFIRM_PREAPPROVED_CREDIT_DAYS}
+    descriptions:
+      registry_preapproved: ${DESCRIPTION_REGISTRY_PREAPPROVED_PRODUCT_OFFER}
+      confirm_preapproved: ${DESCRIPTION_CONFIRM_PREAPPROVED}
+    additionalInfo:
+      confirm_preapproved: ${ADDITIONAL_INFO_CONFIRM_PREAPPROVED}

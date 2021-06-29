@@ -1,0 +1,5 @@
+rootProject.name = 'clients-business-capability'
+include 'clients-business-capability-starter'
+include 'clients-business-capability-sdk'
+include 'clients-business-capability-services'
+

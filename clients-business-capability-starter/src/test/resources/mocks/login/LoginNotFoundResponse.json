@@ -1,0 +1,8 @@
+{
+  "errors": [
+    {
+      "failure": "COGNITO_NOT_FOUND",
+      "value": "newmail@mail.com"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+clients:
+  endpoint:
+    base: /clients
+server:
+  port: 8081
+  servlet:
+    contextPath: /clients
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      use-default-aws-credentials-chain: true
+    region:
+      static: us-east-1
+    dynamodb:
+      endpoint: http://localhost:4569
+    sqs:
+      blacklist-events: http://localhost:9324/queue/default
+      client-events: https://sqs.us-east-1.amazonaws.com/848155883266/clients-test
+      riskengine-events: http://localhost:9324/queue/default
+      saving-account-events: http://localhost:9324/queue/default
+      credits-events: http://localhost:9324/queue/default
+      reporting-events: http://localhost:9324/queue/default
+      client-riskresponse-events: http://localhost:9324/queue/default
+      notification-events: http://localhost:9324/queue/default
+      client-alerts-events: http://localhost:9324/queue/default
+      customer-events: http://localhost:9324/queue/default
+      transactions-events: http://localhost:9324/queue/default
+    cognito:
+      pool-id: fakeMyPoolId
+      clientapp-id: fakeMyClientAppId
+      custom-domain: fakeMyCustomDomainId
+      region: "us-east-2"
+  google:
+    firebase:
+      database-url: https://lulobank-piso19.firebaseio.com
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+services:
+  credits:
+    url: "http://domain.local:8084/"
+  blacklist:
+    url: "http://domain.local:8085/"
+  savings:
+    url: "http://domain.local:8082/"
+  otp:
+    url: "http://domain.local:8083/"
+  client-alerts:
+    url: "http://domain.local:8096/"
+  authentication:
+    url: "http://domain.local:8100/"
+  reporting:
+    url: "http://domain.local:8089/"
+  parameters:
+    url: "http://localhost:8088/"
+  reporting-xcb:
+    url: "http://localhost:8104/"
+  digital-evidence-xbc:
+    url: "http://domain.local:8111/"
+flexibility:
+  sdk:
+    url: "http://happy.flexibilty.com"
+    clientId: fakeClientId
+    secret: fakeSecretId
+login:
+  attempts:
+    3: 120
+    6: 600
+    7: 1200
+    8: 1800
+spring.autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+    - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} | marker=%marker |  clientId=%X{clientId} | level=%5p | thread=%thread | traceId=%X{traceId} spanId=%X{spanId} |  projectVersion=%X{projectVersion} |class=%class{15}.%L | msg="%.-50000m"%n'
+
+savingaccount:
+  closure:
+    balance:
+      lulo:
+        max: 1000
+      cardlessWithdrawal:
+        min: 20000
+        max: 1200000

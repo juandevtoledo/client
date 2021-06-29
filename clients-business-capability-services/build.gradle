@@ -1,0 +1,91 @@
+description = ''
+
+dependencies {
+  compile project(':clients-business-capability-sdk')
+
+  implementation ('com.lulobank:otp-business-capability-sdk:1.0.96-SNAPSHOT') {
+    exclude group: "org.springframework.boot", module: "spring-boot-starter-data-redis"
+  }
+
+  compile (group: 'com.lulobank', name:'credits-business-capability-sdk', version: '1.0.277' ){
+    exclude  module: 'tracing-lib'
+    exclude  module: 'lulobank-core'
+    exclude  module: 'lulobank-utils-client'
+    exclude  module: 'lulobank-starter'
+  }
+  compile (group: 'com.lulobank', name:'savingsaccounts-business-capability-sdk', version: '1.0.36-SNAPSHOT' ){
+    exclude  module: 'tracing-lib'
+  }
+  compile group: 'com.lulobank', name: 'lulobank-core', version: '1.0.14-SNAPSHOT'
+  compile (group: 'com.lulobank', name:'client-alerts-business-capability-sdk', version: '1.0.84' ){
+    exclude  module: 'lulobank-core'
+    exclude  module: 'lulobank-utils-client'
+    exclude  module: 'lulobank-starter'
+  }
+
+  compile ('com.lulobank:reporting-business-capability-sdk:1.0.107'){
+    exclude group: "org.springframework.boot"
+    exclude module: 'lulobank-core'
+    exclude module: 'lulobank-utils-client'
+  }
+
+  compile ('com.lulobank:parameters-business-capability-sdk:1.0.70'){
+    exclude group: "org.springframework.boot"
+    exclude module: 'lulobank-core'
+    exclude module: 'lulobank-utils-client'
+  }
+
+  compile group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.3.0'
+  compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+  compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
+  compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-sns', version: '1.11.613'
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-ses', version: '1.11.613'
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-sqs', version: '1.11.618'
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.616'
+  compile group: 'com.amazonaws', name: 'aws-java-sdk-cognitoidp', version: '1.11.616'
+  implementation 'com.google.guava:guava:30.0-jre'
+  implementation 'com.google.api-client:google-api-client:1.30.11'
+  implementation 'com.google.firebase:firebase-admin:6.11.0'
+  compile group: 'io.github.boostchicken', name: 'spring-data-dynamodb', version: '5.2.5'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws-messaging', version: '2.2.4.RELEASE'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-aws-autoconfigure', version: '2.2.4.RELEASE'
+  implementation 'org.owasp.encoder:encoder:1.2'
+
+  implementation('com.lulobank:customer-service-business-capability-sdk:1.0.9-SNAPSHOT') {
+    exclude group: "org.springframework.boot"
+    exclude module: 'lulobank-core'
+    exclude module: 'lulobank-utils-client'
+    exclude module: 'lulobank-starter'
+  }
+  implementation group: 'io.vavr', name: 'vavr', version: '0.10.2'
+  implementation 'org.mapstruct:mapstruct-jdk8:1.3.1.Final'
+  annotationProcessor "org.mapstruct:mapstruct-processor:1.3.1.Final"
+  testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.3.1.Final"
+  compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '8.4'
+
+  testCompile group: 'junit', name: 'junit', version: '4.12'
+  testCompile group: 'org.springframework', name: 'spring-test', version: '5.1.9.RELEASE'
+  testCompile 'org.mockito:mockito-core:2.13.0'
+
+  compile group: 'com.lulobank', name: 'lulobank-flexmiddleware-sdk',version:'1.0.70'
+
+  compileOnly 'org.projectlombok:lombok:1.18.12'
+  annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+  implementation 'com.lulobank:biometric-api:0.2.10'
+
+}
+apply plugin: 'info.solidsoft.pitest'
+pitest {
+  threads = 1
+  outputFormats = ['XML', 'HTML']
+  mutationThreshold = 10
+  timestampedReports = true
+  timeoutConstInMillis = 10000
+  enableDefaultIncrementalAnalysis = true
+  jvmArgs = ['-Xmx2048m','-Xms1024m']
+  pitestVersion = '1.4.6'
+
+}
+
